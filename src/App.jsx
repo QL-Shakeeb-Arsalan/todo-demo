@@ -3,6 +3,7 @@ import "./App.css";
 
 function App() {
   const [todoName, setTodoName] = useState("");
+  const [editId, setIsEditId] = useState("");
   const [todoList, setTodoList] = useState([]);
 
   const handleTodoName = (e) => {
@@ -21,7 +22,6 @@ function App() {
     setTodoName("");
   };
 
-
   const handleDelete = (id) => {
     setTodoList((prevTodoList) => {
       return prevTodoList.filter((todo) => todo.id !== id);
@@ -36,7 +36,22 @@ function App() {
       }));
     });
   };
-  
+  const handleEdit = (id) => {
+    setIsEditId(id);
+    const title = todoList.find((todo) => todo.id === id).title;
+    setTodoName(title);
+  };
+
+  const handleUpdate = () => {
+    setTodoList((prevTodoList) => {
+      return prevTodoList.map((todo) => ({
+        ...todo,
+        title: todo.id === editId ? todoName : todo.title,
+      }));
+    });
+    setTodoName("");
+    setIsEditId("");
+  };
 
   return (
     <main className="main">
@@ -56,6 +71,12 @@ function App() {
                   {todo.title}
                 </p>
                 <div className="action-btn">
+                  <button
+                    className="btn success"
+                    onClick={() => handleEdit(todo.id)}
+                  >
+                    Edit
+                  </button>
                   <button
                     className="btn success"
                     onClick={() => handleComplete(todo.id)}
@@ -82,8 +103,12 @@ function App() {
             value={todoName}
             onChange={handleTodoName}
           />
-          <button className="btn primary" type="button" onClick={handleAddTodo}>
-            Add Todo
+          <button
+            className="btn primary"
+            type="button"
+            onClick={editId ? handleUpdate : handleAddTodo}
+          >
+            {`${editId ? "Update" : "Add"} Todo`}
           </button>
         </div>
       </div>
