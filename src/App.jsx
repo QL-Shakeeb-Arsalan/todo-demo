@@ -36,6 +36,7 @@ function App() {
       }));
     });
   };
+
   const handleEdit = (id) => {
     setIsEditId(id);
     const title = todoList.find((todo) => todo.id === id).title;
@@ -56,10 +57,31 @@ function App() {
   return (
     <main className="main">
       <div className="container">
-        <h1>Todo List</h1>
+        <h1 className="heading">Todo App</h1>
+        <div className="todo-field">
+          <input
+            type="text"
+            className="search-box"
+            placeholder="What need to done?"
+            value={todoName}
+            onChange={handleTodoName}
+          />
+          {
+            todoName && (<button
+              className="btn primary"
+              type="button"
+              onClick={editId ? handleUpdate : handleAddTodo}
+            >
+              {`${editId ? "Update" : "Add"} Todo`}
+            </button>)
+          }
+          
+        </div>
+        
+        <h3>Todo List</h3>
         <div>
           {todoList.length === 0 ? (
-            <div className="todo-list">No Todo Added</div>
+            <div className="todo-list no-todo">No Todo Added</div>
           ) : (
             todoList.map((todo) => (
               <div className="todo-list" key={todo.id}>
@@ -93,23 +115,6 @@ function App() {
               </div>
             ))
           )}
-        </div>
-
-        <div className="todo-field">
-          <input
-            type="text"
-            className="search-box"
-            placeholder="What need to done?"
-            value={todoName}
-            onChange={handleTodoName}
-          />
-          <button
-            className="btn primary"
-            type="button"
-            onClick={editId ? handleUpdate : handleAddTodo}
-          >
-            {`${editId ? "Update" : "Add"} Todo`}
-          </button>
         </div>
       </div>
     </main>
